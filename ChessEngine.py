@@ -1,9 +1,11 @@
+#checking the git
 
 class GameState():
     def __init__(self):
             #8x8 board ed list, each element has 2 characters
             #b and w - colors(first element)
             #second character is type of element
+
         self.board = [
            ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
            ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
