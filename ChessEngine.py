@@ -1,9 +1,11 @@
+#checking the git
 
 class GameState():
     def __init__(self):
             #8x8 board ed list, each element has 2 characters
             #b and w - colors(first element)
             #second character is type of element
+
         self.board = [
            ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
            ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
@@ -11,9 +13,7 @@ class GameState():
            ["--", "--", "--", "--", "--", "--", "--", "--"],
            ["--", "--", "--", "--", "--", "--", "--", "--"],
            ["--", "--", "--", "--", "--", "--", "--", "--"],
-           ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
-           ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
-        ]
+           ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"], ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"] ]
         self.whiteToMove = True
         self.moveLog = []
 
@@ -37,7 +37,7 @@ class GameState():
 
     #gets all moves without considering checks
     def getAllPossibleMoves(self):
-        moves = []
+        moves = [move((6,4), (4,4), self.board)]
         for r in range(len(self.board)): #search rows
             for c in range(len(self.board[r])): #search col
                 turn = self.board[r][c][0]
@@ -73,6 +73,13 @@ class move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+        print(self.moveID)
+
+    def __eq__(self, other):
+        if isinstance(other, move):
+            return self.moveID == other.moveID
+        return False
 
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol)
