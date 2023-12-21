@@ -13,7 +13,8 @@ class GameState():
            ["--", "--", "--", "--", "--", "--", "--", "--"],
            ["--", "--", "--", "--", "--", "--", "--", "--"],
            ["--", "--", "--", "--", "--", "--", "--", "--"],
-           ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"], ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"] ]
+           ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+           ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"] ]
         self.whiteToMove = True
         self.moveLog = []
 
@@ -37,11 +38,11 @@ class GameState():
 
     #gets all moves without considering checks
     def getAllPossibleMoves(self):
-        moves = [move((6,4), (4,4), self.board)]
+        moves = []
         for r in range(len(self.board)): #search rows
             for c in range(len(self.board[r])): #search col
                 turn = self.board[r][c][0]
-                if (turn =='w' and not self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                if (turn =='w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
                     if piece =='p':
                         self.getPawnMoves(r, c, moves)
@@ -50,16 +51,23 @@ class GameState():
     
         return moves
 
-
-
     def getPawnMoves(self, r, c, moves):
-        pass
+        if self.whiteToMove: #white Pawn moves
+            if self.board[r-1][c] == "--": #check for one move advance
+                moves.append(Move((r,c),(r-1, c), self.board))
+                if r ==6 and self.board[r-2][c] == "--": #check for 2 moves advance
+                    moves.append(Move((r, c), (r-2, c), self.board))
+            if c-1 >= 0: #checks for captures to left
+                if self.board[r-1][c-1][0] == 'b': #captures to left
+                    moves.append(Move((r-1, c-1),(r-1, c-1), self.board))
+            if c+1 <= 7: #checks for captures to right
+                if self.board[r-1][c+1][0] == 'b': #captures to right 
+                    moves.append(Move((r-1, c+1),(r-1, c+1), self.board))
 
     def getRookMoves(self, r, c, moves):
         pass
 
-
-class move():
+class Move():
     #maps keys to values
     ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, "5": 3, "6": 2, "7": 1, "8": 0}
     rowsToRanks = {v: k for k,v in ranksToRows.items()}
@@ -74,10 +82,10 @@ class move():
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
-        print(self.moveID)
+        #print(self.moveID)
 
     def __eq__(self, other):
-        if isinstance(other, move):
+        if isinstance(other, Move):
             return self.moveID == other.moveID
         return False
 

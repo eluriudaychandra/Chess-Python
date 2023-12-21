@@ -1,4 +1,4 @@
-
+    
 import pygame as p
 import ChessEngine
 
@@ -48,11 +48,11 @@ def main():
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected) #appends sqselected one after the other
                 if len(playerClicks) == 2:
-                    move = ChessEngine.move(playerClicks[0], playerClicks[1], gs.board)
-                    print(move.getChessNotation())
+                    Move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(Move.getChessNotation())
 
-                    if move in validMoves:
-                        gs.makeMove(move)
+                    if Move in validMoves:
+                        gs.makeMove(Move)
                         moveMade = True
 
                     sqSelected = () #reset user clicks
